@@ -1,1 +1,7 @@
-{"sent_ids": [], "last_run": null}
+{
+  "sent_ids": [
+    "https://research.google/blog/reasoningbank-enabling-agents-to-learn-from-experience/",
+    "https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard"
+  ],
+  "last_run": "2026-04-22T09:11:58.506135+00:00"
+}
