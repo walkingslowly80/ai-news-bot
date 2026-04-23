@@ -1,4 +1,4 @@
-"""AI News Bot - 매일 AI 회사 소식을 Slack으로 전송"""
+"""AI News Bot - 매일 AI 회사 소식을 한국어 요약과 함께 Slack으로 전송"""
 import os, json, time, re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -14,7 +14,7 @@ FEEDS = [
     ("Hugging Face", "https://huggingface.co/blog/feed.xml", "🟡"),
 ]
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 LOOKBACK_HOURS = 24
 STATE_FILE = Path("state.json")
 MAX_TOTAL_ITEMS = 15
@@ -46,7 +46,7 @@ def fetch_new_items(state):
                     if entry.get(k):
                         pub = datetime(*entry[k][:6], tzinfo=timezone.utc); break
                 if pub and pub < cutoff: continue
-                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or "").strip()[:500]
+                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or "").strip()[:1500]
                 new_items.append({
                     "id": eid, "source": source, "emoji": emoji,
                     "title": entry.get("title", "").strip(),
@@ -58,19 +58,42 @@ def fetch_new_items(state):
     new_items.sort(key=lambda x: x["published"] or "", reverse=True)
     return new_items[:MAX_TOTAL_ITEMS]
 
-def summarize_with_claude(items):
-    if not ANTHROPIC_API_KEY or not items: return None
-    text = "\n\n".join(f"[{i+1}] {it['source']}\n제목: {it['title']}\n내용: {it['summary']}" for i, it in enumerate(items))
-    prompt = f"다음 AI 소식들을 각각 1-2문장 한국어로 간결하게 요약. [1] [2] 형식 유지, 명사형 종결.\n\n{text}\n\n요약:"
+def summarize_with_gemini(items):
+    """Google Gemini API로 한국어 요약 생성 (무료, 하루 1500회)"""
+    if not GOOGLE_API_KEY or not items: return None
+    text = "\n\n".join(
+        f"[{i+1}] 출처: {it['source']}\n제목: {it['title']}\n내용: {it['summary']}"
+        for i, it in enumerate(items)
+    )
+    prompt = f"""다음은 AI 회사들의 최신 소식입니다. 각 항목을 2-3문장의 한국어로 요약해주세요.
+
+요구사항:
+- 각 항목 번호를 그대로 유지하세요 (예: [1], [2])
+- 명사형 종결("~함", "~출시")로 간결하게
+- 기술 용어는 영어 그대로 (GPT-5, Claude Opus 등)
+- 핵심만! 마케팅 문구는 제외
+
+소식 목록:
+{text}
+
+번호별 한국어 요약 (다른 설명 없이 [1] 요약 [2] 요약 형식으로):"""
+    
     try:
-        r = requests.post("https://api.anthropic.com/v1/messages",
-            headers={"x-api-key": ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-            json={"model": "claude-haiku-4-5-20251001", "max_tokens": 2000, "messages": [{"role": "user", "content": prompt}]},
-            timeout=60)
+        r = requests.post(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+            headers={"Content-Type": "application/json"},
+            params={"key": GOOGLE_API_KEY},
+            json={
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0.3, "maxOutputTokens": 2000}
+            },
+            timeout=60
+        )
         r.raise_for_status()
-        return r.json()["content"][0]["text"]
+        return r.json()["candidates"][0]["content"]["parts"][0]["text"]
     except Exception as e:
-        print(f"[summary] {e}"); return None
+        print(f"[summary] Gemini 오류: {e}")
+        return None
 
 def parse_summary(text, n):
     result = {}
@@ -87,9 +110,15 @@ def build_blocks(items, summaries):
         {"type": "divider"},
     ]
     for i, it in enumerate(items):
-        s = summaries.get(i) or it["summary"][:200]
-        t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n{s}"[:2900]
+        summary = summaries.get(i) or it["summary"][:300]
+        # 요약이 있으면 한국어 요약 표시, 없으면 원문 요약
+        if summaries.get(i):
+            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n\n📝 *한국어 요약*\n{summary}"
+        else:
+            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n{summary}"
+        t = t[:2900]
         blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": t}})
+        blocks.append({"type": "divider"})
     return blocks
 
 def main():
@@ -98,10 +127,17 @@ def main():
     items = fetch_new_items(state)
     print(f"신규 {len(items)}건")
     if not items: return
+    
     summaries = {}
-    if ANTHROPIC_API_KEY:
-        raw = summarize_with_claude(items)
-        if raw: summaries = parse_summary(raw, len(items))
+    if GOOGLE_API_KEY:
+        print("[summary] Gemini로 한국어 요약 생성 중...")
+        raw = summarize_with_gemini(items)
+        if raw: 
+            summaries = parse_summary(raw, len(items))
+            print(f"  → {len(summaries)}개 요약 완료")
+    else:
+        print("[summary] GOOGLE_API_KEY 없음, 원문 요약 사용")
+    
     blocks = build_blocks(items, summaries)
     for chunk in [blocks[i:i+45] for i in range(0, len(blocks), 45)]:
         r = requests.post(SLACK_WEBHOOK_URL, json={"blocks": chunk}, timeout=15)
