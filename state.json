@@ -1,7 +1,13 @@
 {
   "sent_ids": [
     "https://research.google/blog/reasoningbank-enabling-agents-to-learn-from-experience/",
-    "https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard"
+    "https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard",
+    "https://research.google/blog/its-all-about-the-angle-your-photos-re-composed/",
+    "https://huggingface.co/blog/nvidia/gemma4",
+    "https://openai.com/index/making-chatgpt-better-for-clinicians",
+    "https://openai.com/academy/workspace-agents",
+    "https://openai.com/index/speeding-up-agentic-workflows-with-websockets",
+    "https://openai.com/index/introducing-workspace-agents-in-chatgpt"
   ],
-  "last_run": "2026-04-22T09:11:58.506135+00:00"
+  "last_run": "2026-04-23T00:54:09.929939+00:00"
 }
