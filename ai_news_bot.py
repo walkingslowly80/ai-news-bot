@@ -1,4 +1,4 @@
-"""AI News Bot - 매일 AI 회사 소식을 한국어 요약과 함께 Slack으로 전송"""
+"""AI News Bot - 매일 AI 회사 소식을 한국어 요약과 함께 Slack으로 전송 (rate limit 대응 강화)"""
 import os, json, time, re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -17,7 +17,7 @@ SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 LOOKBACK_HOURS = 24
 STATE_FILE = Path("state.json")
-MAX_TOTAL_ITEMS = 15
+MAX_TOTAL_ITEMS = 10  # 15에서 10으로 축소
 
 def load_state():
     if STATE_FILE.exists():
@@ -46,7 +46,7 @@ def fetch_new_items(state):
                     if entry.get(k):
                         pub = datetime(*entry[k][:6], tzinfo=timezone.utc); break
                 if pub and pub < cutoff: continue
-                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or "").strip()[:1500]
+                summary = re.sub(r"<[^>]+>", "", entry.get("summary", "") or "").strip()[:1000]
                 new_items.append({
                     "id": eid, "source": source, "emoji": emoji,
                     "title": entry.get("title", "").strip(),
@@ -58,90 +58,104 @@ def fetch_new_items(state):
     new_items.sort(key=lambda x: x["published"] or "", reverse=True)
     return new_items[:MAX_TOTAL_ITEMS]
 
-def summarize_with_gemini(items):
-    """Google Gemini API로 한국어 요약 생성 (무료, 하루 1500회)"""
-    if not GOOGLE_API_KEY or not items: return None
-    text = "\n\n".join(
-        f"[{i+1}] 출처: {it['source']}\n제목: {it['title']}\n내용: {it['summary']}"
-        for i, it in enumerate(items)
-    )
-    prompt = f"""다음은 AI 회사들의 최신 소식입니다. 각 항목을 2-3문장의 한국어로 요약해주세요.
+def call_gemini(prompt, max_retries=3):
+    """Gemini API 호출 + 자동 재시도"""
+    for attempt in range(max_retries):
+        try:
+            r = requests.post(
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+                headers={"Content-Type": "application/json"},
+                params={"key": GOOGLE_API_KEY},
+                json={
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1000}
+                },
+                timeout=60
+            )
+            if r.status_code == 429:
+                wait_time = 30 * (attempt + 1)  # 30초, 60초, 90초
+                print(f"  ⏰ 429 에러, {wait_time}초 대기 후 재시도... ({attempt+1}/{max_retries})")
+                time.sleep(wait_time)
+                continue
+            r.raise_for_status()
+            data = r.json()
+            return data["candidates"][0]["content"]["parts"][0]["text"]
+        except Exception as e:
+            print(f"  ! 시도 {attempt+1} 실패: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(10)
+    return None
 
-요구사항:
-- 각 항목 번호를 그대로 유지하세요 (예: [1], [2])
-- 명사형 종결("~함", "~출시")로 간결하게
-- 기술 용어는 영어 그대로 (GPT-5, Claude Opus 등)
-- 핵심만! 마케팅 문구는 제외
-
-소식 목록:
-{text}
-
-번호별 한국어 요약 (다른 설명 없이 [1] 요약 [2] 요약 형식으로):"""
+def summarize_each(items):
+    """각 항목을 개별 요약 (rate limit 회피)"""
+    if not GOOGLE_API_KEY or not items: 
+        return {}
     
-    try:
-        r = requests.post(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-            headers={"Content-Type": "application/json"},
-            params={"key": GOOGLE_API_KEY},
-            json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"temperature": 0.3, "maxOutputTokens": 2000}
-            },
-            timeout=60
-        )
-        r.raise_for_status()
-        return r.json()["candidates"][0]["content"]["parts"][0]["text"]
-    except Exception as e:
-        print(f"[summary] Gemini 오류: {e}")
-        return None
+    summaries = {}
+    for i, it in enumerate(items):
+        prompt = f"""다음 AI 소식을 한국어로 2-3문장 요약하세요. 명사형 종결("~함", "~출시"), 사실만, 다른 설명 없이.
 
-def parse_summary(text, n):
-    result = {}
-    for m in re.finditer(r"\[(\d+)\]\s*(.+?)(?=\[\d+\]|\Z)", text, re.DOTALL):
-        i = int(m.group(1)) - 1
-        if 0 <= i < n: result[i] = m.group(2).strip()
-    return result
+출처: {it['source']}
+제목: {it['title']}
+내용: {it['summary']}
+
+요약:"""
+        
+        print(f"[summary] {i+1}/{len(items)}: {it['title'][:50]}...")
+        result = call_gemini(prompt)
+        if result:
+            summaries[i] = result.strip()
+            print(f"  ✓ 완료")
+        else:
+            print(f"  ✗ 실패")
+        
+        # 분당 15회 한도 회피: 항목 사이에 5초 대기
+        if i < len(items) - 1:
+            time.sleep(5)
+    
+    return summaries
 
 def build_blocks(items, summaries):
-    today = datetime.now(timezone(timedelta(hours=9))).strftime("%Y년 %m월 %d일")
+    today = datetime.now(timezone(timedelta(hours=9))).strftime("%Y년 %m월 %d일 %H시")
     blocks = [
         {"type": "header", "text": {"type": "plain_text", "text": f"🤖 오늘의 AI 소식 ({today})"}},
         {"type": "context", "elements": [{"type": "mrkdwn", "text": f"신규 *{len(items)}건* | Anthropic 🟣 OpenAI 🟢 Google 🔵 기타 🟡"}]},
         {"type": "divider"},
     ]
     for i, it in enumerate(items):
-        summary = summaries.get(i) or it["summary"][:300]
-        # 요약이 있으면 한국어 요약 표시, 없으면 원문 요약
         if summaries.get(i):
-            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n\n📝 *한국어 요약*\n{summary}"
+            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n\n📝 *한국어 요약*\n{summaries[i]}"
         else:
-            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n{summary}"
+            t = f"{it['emoji']} *<{it['link']}|{it['title']}>*\n_{it['source']}_\n{it['summary'][:300]}"
         t = t[:2900]
         blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": t}})
         blocks.append({"type": "divider"})
     return blocks
 
 def main():
-    if not SLACK_WEBHOOK_URL: raise SystemExit("SLACK_WEBHOOK_URL 없음")
+    if not SLACK_WEBHOOK_URL: 
+        raise SystemExit("SLACK_WEBHOOK_URL 없음")
+    
+    print(f"[config] GOOGLE_API_KEY 등록됨: {bool(GOOGLE_API_KEY)}")
+    
     state = load_state()
     items = fetch_new_items(state)
     print(f"신규 {len(items)}건")
-    if not items: return
+    if not items: 
+        print("새 글 없음. 종료.")
+        return
     
     summaries = {}
     if GOOGLE_API_KEY:
-        print("[summary] Gemini로 한국어 요약 생성 중...")
-        raw = summarize_with_gemini(items)
-        if raw: 
-            summaries = parse_summary(raw, len(items))
-            print(f"  → {len(summaries)}개 요약 완료")
-    else:
-        print("[summary] GOOGLE_API_KEY 없음, 원문 요약 사용")
+        print("[summary] 항목별 한국어 요약 시작 (분당 한도 고려, 5초 간격)")
+        summaries = summarize_each(items)
+        print(f"  → 총 {len(summaries)}/{len(items)}개 요약 완료")
     
     blocks = build_blocks(items, summaries)
     for chunk in [blocks[i:i+45] for i in range(0, len(blocks), 45)]:
         r = requests.post(SLACK_WEBHOOK_URL, json={"blocks": chunk}, timeout=15)
-        if r.status_code != 200: raise SystemExit(f"Slack 실패: {r.text}")
+        if r.status_code != 200: 
+            raise SystemExit(f"Slack 실패: {r.text}")
         time.sleep(1)
     state["sent_ids"] = state.get("sent_ids", []) + [it["id"] for it in items]
     state["last_run"] = datetime.now(timezone.utc).isoformat()
