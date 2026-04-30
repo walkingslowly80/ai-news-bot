@@ -63,7 +63,7 @@ def call_gemini(prompt, max_retries=3):
     for attempt in range(max_retries):
         try:
             r = requests.post(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
                 headers={"Content-Type": "application/json"},
                 params={"key": GOOGLE_API_KEY},
                 json={
