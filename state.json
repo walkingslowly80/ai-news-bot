@@ -39,7 +39,8 @@
     "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/medqa",
     "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/cybersecqwen-4b",
     "https://huggingface.co/blog/allenai/emo",
-    "https://openai.com/index/running-codex-safely"
+    "https://openai.com/index/running-codex-safely",
+    "https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper"
   ],
-  "last_run": "2026-05-09T07:26:32.066014+00:00"
+  "last_run": "2026-05-10T07:50:06.204190+00:00"
 }
