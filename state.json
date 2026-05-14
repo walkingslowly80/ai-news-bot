@@ -48,7 +48,8 @@
     "https://huggingface.co/blog/amazon/foundation-model-building-blocks",
     "https://openai.com/signals/research/2026q1-update",
     "https://openai.com/academy/how-finance-teams-use-codex",
-    "https://openai.com/index/building-codex-windows-sandbox"
+    "https://openai.com/index/building-codex-windows-sandbox",
+    "https://huggingface.co/blog/continuous_async"
   ],
-  "last_run": "2026-05-14T09:41:36.487646+00:00"
+  "last_run": "2026-05-14T16:22:20.669014+00:00"
 }
