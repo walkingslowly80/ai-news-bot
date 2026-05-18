@@ -54,7 +54,11 @@
     "https://huggingface.co/blog/ibm-granite/granite-embedding-multilingual-r2",
     "https://openai.com/index/work-with-codex-from-anywhere",
     "https://openai.com/index/personal-finance-chatgpt",
-    "https://openai.com/index/malta-chatgpt-plus-partnership"
+    "https://openai.com/index/malta-chatgpt-plus-partnership",
+    "https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation",
+    "https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers",
+    "https://huggingface.co/blog/ibm-research/open-agent-leaderboard",
+    "https://openai.com/index/dell-codex-enterprise-partnership"
   ],
-  "last_run": "2026-05-16T11:36:27.983244+00:00"
+  "last_run": "2026-05-18T17:37:14.723935+00:00"
 }
