@@ -68,7 +68,11 @@
     "https://deepmind.google/blog/were-launching-the-google-deepmind-accelerator-program-in-asia-pacific-to-tackle-environmental-risks/",
     "https://huggingface.co/blog/Dharma-AI/specialization-beats-scale",
     "https://openai.com/index/gartner-2026-agentic-coding-leader",
-    "https://huggingface.co/blog/nvidia/nemotron-labs-diffusion"
+    "https://huggingface.co/blog/nvidia/nemotron-labs-diffusion",
+    "https://huggingface.co/blog/ibm-research/itbench-aa",
+    "https://research.google/blog/private-analytics-via-zero-trust-aggregation/",
+    "https://openai.com/index/cisco",
+    "https://openai.com/index/building-self-improving-tax-agents-with-codex"
   ],
-  "last_run": "2026-05-23T04:12:26.812377+00:00"
+  "last_run": "2026-05-28T04:47:53.085289+00:00"
 }
