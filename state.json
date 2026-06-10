@@ -114,7 +114,10 @@
     "https://deepmind.google/blog/introducing-gemma-4-12b-a-unified-encoder-free-multimodal-model/",
     "https://deepmind.google/blog/powering-the-future-of-robotics-in-europe/",
     "https://openai.com/index/nextdoor",
-    "https://openai.com/index/notion"
+    "https://openai.com/index/notion",
+    "https://openai.com/index/lseg",
+    "https://huggingface.co/blog/ServiceNow-AI/code-switching",
+    "https://huggingface.co/blog/CohereLabs/introducing-north-mini-code"
   ],
-  "last_run": "2026-06-10T04:56:18.844371+00:00"
+  "last_run": "2026-06-10T11:50:50.715104+00:00"
 }
