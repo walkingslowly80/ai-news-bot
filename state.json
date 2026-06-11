@@ -117,7 +117,12 @@
     "https://openai.com/index/notion",
     "https://openai.com/index/lseg",
     "https://huggingface.co/blog/ServiceNow-AI/code-switching",
-    "https://huggingface.co/blog/CohereLabs/introducing-north-mini-code"
+    "https://huggingface.co/blog/CohereLabs/introducing-north-mini-code",
+    "https://openai.com/index/using-codex-to-simulate-black-holes",
+    "https://openai.com/index/openai-on-oracle-cloud",
+    "https://research.google/blog/new-framework-for-auditing-machine-unlearning/",
+    "https://deepmind.google/blog/diffusiongemma-4x-faster-text-generation/",
+    "https://openai.com/index/prc-linked-influence-operations-ai-debates"
   ],
-  "last_run": "2026-06-10T11:50:50.715104+00:00"
+  "last_run": "2026-06-11T05:04:11.688807+00:00"
 }
