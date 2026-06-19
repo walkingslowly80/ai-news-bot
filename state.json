@@ -136,7 +136,11 @@
     "https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware",
     "https://huggingface.co/blog/zai-org/glm-52-blog",
     "https://huggingface.co/blog/allenai/molmomotion",
-    "https://openai.com/index/ai-chemist-improves-reaction"
+    "https://openai.com/index/ai-chemist-improves-reaction",
+    "https://huggingface.co/blog/ServiceNow/mosaicleaks",
+    "https://openai.com/index/chatgpt-enterprise-spend-controls",
+    "https://openai.com/index/improving-health-intelligence-in-chatgpt",
+    "https://openai.com/index/diagnose-rare-childhood-diseases"
   ],
-  "last_run": "2026-06-18T05:10:52.310646+00:00"
+  "last_run": "2026-06-19T05:30:46.931602+00:00"
 }
