@@ -149,7 +149,11 @@
     "https://huggingface.co/blog/huggingface-hub-release-ci",
     "https://openai.com/index/gpt-5-immunology-mystery",
     "https://openai.com/index/helping-build-shared-standards-for-advanced-ai",
-    "https://huggingface.co/blog/ibm-research/cuga-apps"
+    "https://huggingface.co/blog/ibm-research/cuga-apps",
+    "https://research.google/blog/thinking-to-recall-how-reasoning-unlocks-parametric-knowledge-in-llms/",
+    "https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash/",
+    "https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel",
+    "https://openai.com/index/openai-broadcom-jalapeno-inference-chip"
   ],
-  "last_run": "2026-06-24T04:43:37.575840+00:00"
+  "last_run": "2026-06-25T04:38:55.787679+00:00"
 }
