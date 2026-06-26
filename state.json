@@ -154,7 +154,10 @@
     "https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash/",
     "https://huggingface.co/blog/nvidia/accelerating-fine-tuning-nvidia-nemo-automodel",
     "https://openai.com/index/openai-broadcom-jalapeno-inference-chip",
-    "https://openai.com/index/how-agents-are-transforming-work"
+    "https://openai.com/index/how-agents-are-transforming-work",
+    "https://huggingface.co/blog/vllm-jobs",
+    "https://huggingface.co/blog/allenai/hybrid-token-prediction",
+    "https://research.google/blog/optimizing-cloud-economics-with-linear-elastic-caching/"
   ],
-  "last_run": "2026-06-25T11:10:01.573411+00:00"
+  "last_run": "2026-06-26T04:46:43.239618+00:00"
 }
