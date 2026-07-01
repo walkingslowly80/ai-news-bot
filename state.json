@@ -162,7 +162,13 @@
     "https://openai.com/index/previewing-gpt-5-6-sol",
     "https://openai.com/index/hp-frontier-partnership",
     "https://openai.com/index/mapping-ai-jobs-transition-eu",
-    "https://huggingface.co/blog/allenai/discoformer"
+    "https://huggingface.co/blog/allenai/discoformer",
+    "https://huggingface.co/blog/ibm-research/scarfbench",
+    "https://research.google/blog/expanding-our-heat-resilience-data-to-50-global-cities/",
+    "https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash/",
+    "https://huggingface.co/blog/Dharma-AI/why-specialization-is-inevitable",
+    "https://research.google/blog/introducing-tabfm-a-zero-shot-foundation-model-for-tabular-data/",
+    "https://openai.com/index/how-chatgpt-adoption-has-expanded"
   ],
-  "last_run": "2026-06-30T04:39:26.890576+00:00"
+  "last_run": "2026-07-01T04:59:18.393356+00:00"
 }
