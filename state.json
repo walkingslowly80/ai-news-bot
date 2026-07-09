@@ -175,7 +175,11 @@
     "https://huggingface.co/blog/Photoroom/prx-part4-data",
     "https://huggingface.co/blog/amazon/one-click-to-sagemaker-studio",
     "https://research.google/blog/the-power-of-collaboration-how-we-can-reduce-traffic-congestion/",
-    "https://huggingface.co/blog/microsoft/foundry-managed-compute"
+    "https://huggingface.co/blog/microsoft/foundry-managed-compute",
+    "https://huggingface.co/blog/nvidia/open-data-for-agents",
+    "https://openai.com/index/government-national-security-partnerships",
+    "https://openai.com/index/separating-signal-from-noise-coding-evaluations",
+    "https://openai.com/index/k-12-educators-practical-skills"
   ],
-  "last_run": "2026-07-08T03:51:36.217619+00:00"
+  "last_run": "2026-07-09T04:26:24.115812+00:00"
 }
