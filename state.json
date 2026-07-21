@@ -199,7 +199,9 @@
     "https://openai.com/index/why-teens-deserve-access-safe-ai",
     "https://huggingface.co/blog/Dharma-AI/newer-models-same-advantages",
     "https://huggingface.co/blog/nvidia/scale-diffusers-finetuning-nemo-automodel",
-    "https://openai.com/index/a-scorecard-for-the-ai-age"
+    "https://openai.com/index/a-scorecard-for-the-ai-age",
+    "https://huggingface.co/blog/nvidia/cosmos3edge",
+    "https://openai.com/index/safety-alignment-long-horizon-models"
   ],
-  "last_run": "2026-07-18T03:39:00.921675+00:00"
+  "last_run": "2026-07-21T03:52:25.858593+00:00"
 }
