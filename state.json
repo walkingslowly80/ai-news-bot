@@ -201,7 +201,8 @@
     "https://huggingface.co/blog/nvidia/scale-diffusers-finetuning-nemo-automodel",
     "https://openai.com/index/a-scorecard-for-the-ai-age",
     "https://huggingface.co/blog/nvidia/cosmos3edge",
-    "https://openai.com/index/safety-alignment-long-horizon-models"
+    "https://openai.com/index/safety-alignment-long-horizon-models",
+    "https://huggingface.co/blog/grabette"
   ],
-  "last_run": "2026-07-21T03:52:25.858593+00:00"
+  "last_run": "2026-07-21T10:34:50.431718+00:00"
 }
