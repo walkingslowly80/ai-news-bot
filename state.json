@@ -202,7 +202,11 @@
     "https://openai.com/index/a-scorecard-for-the-ai-age",
     "https://huggingface.co/blog/nvidia/cosmos3edge",
     "https://openai.com/index/safety-alignment-long-horizon-models",
-    "https://huggingface.co/blog/grabette"
+    "https://huggingface.co/blog/grabette",
+    "https://huggingface.co/blog/nvidia/state-of-simulation-for-physical-ai",
+    "https://openai.com/index/introducing-chatgpt-small-business-program",
+    "https://deepmind.google/blog/introducing-gemini-36-flash-35-flash-lite-and-35-flash-cyber/",
+    "https://openai.com/index/hugging-face-model-evaluation-security-incident"
   ],
-  "last_run": "2026-07-21T10:34:50.431718+00:00"
+  "last_run": "2026-07-22T03:53:18.065637+00:00"
 }
