@@ -222,7 +222,11 @@
     "https://huggingface.co/blog/LiquidAI/lfm2-5-encoders",
     "https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control/",
     "https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores",
-    "https://openai.com/index/chatgpt-for-academic-researchers"
+    "https://openai.com/index/chatgpt-for-academic-researchers",
+    "https://research.google/blog/science-one-framework-a-verifiable-autonomous-research-framework-via-chain-of-evidence/",
+    "https://huggingface.co/blog/Dharma-AI/gpu-management",
+    "https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration/",
+    "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6"
   ],
-  "last_run": "2026-07-30T03:38:43.352430+00:00"
+  "last_run": "2026-07-31T03:57:52.285967+00:00"
 }
