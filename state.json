@@ -256,7 +256,12 @@
     "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/",
     "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b",
     "https://research.google/blog/empty-shelves-or-lost-keys-recall-is-the-bottleneck-for-parametric-factuality/",
-    "https://openai.com/index/how-enterprises-put-ai-to-work"
+    "https://openai.com/index/how-enterprises-put-ai-to-work",
+    "https://huggingface.co/blog/amazon/strands-lerobot-streaming-data-loop",
+    "https://deepmind.google/blog/introducing-gemini-3-7-flash/",
+    "https://openai.com/index/builders-guide-to-gpt-5-6",
+    "https://openai.com/index/previewing-ultrafast",
+    "https://openai.com/index/dali-rajic-chief-revenue-officer"
   ],
-  "last_run": "2026-08-13T03:04:34.925423+00:00"
+  "last_run": "2026-08-14T03:03:28.028159+00:00"
 }
