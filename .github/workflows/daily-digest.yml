@@ -1,7 +1,6 @@
 name: AI News Daily Digest
 
-on:
-  workflow_dispatch:
+on: []
 
 permissions:
   contents: write
